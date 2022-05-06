@@ -1,5 +1,6 @@
 package com.example.data.datasource.amazon
 
+import android.util.Log
 import com.amazon.device.iap.model.ProductDataResponse
 import com.amazon.device.iap.model.PurchaseResponse
 import com.amazon.device.iap.model.PurchaseUpdatesResponse
@@ -9,15 +10,18 @@ import com.example.domain.models.BillingListenerEvent
 import com.example.domain.models.NowProduct
 import com.example.domain.models.NowProductWrapper
 import com.example.domain.models.NowUserData
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import com.example.domain.usecase.BillingListenerUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 /**
  * Every call you initiate via the PurchasingService results in a corresponding response received
  * by the PurchasingListener. Each of these responses uses a response object:
  */
-class AmazonPurchasingListenerDataSource: BillingListenerDataSource {
+class AmazonPurchasingListenerDataSource(): BillingListenerDataSource {
 
     private val _billingEventSubject = MutableStateFlow<BillingListenerEvent?>(null)
     private val billingEventSubject: Flow<BillingListenerEvent?> = _billingEventSubject
@@ -26,12 +30,17 @@ class AmazonPurchasingListenerDataSource: BillingListenerDataSource {
         return billingEventSubject.filterNotNull()
     }
 
+    override fun forceResponse() {
+        _billingEventSubject.value = BillingListenerEvent.AlreadyPurchasedEvent
+    }
+
 
     /**
      * onUserDataResponse(UserDataResponse userDataResponse): Invoked after a call to getUserData.
      * Determines the UserId and marketplace of the currently logged on user.
      */
     override fun onUserDataResponse(response: UserDataResponse?) {
+        Log.v("ListenerDataSource", "onUserDataResponse")
         _billingEventSubject.value = BillingListenerEvent.UserDataEvent(NowUserData(response!!.userData.userId))
     }
 
@@ -42,7 +51,7 @@ class AmazonPurchasingListenerDataSource: BillingListenerDataSource {
      * and query the system only for updates.
      */
     override fun onProductDataResponse(response: ProductDataResponse) {
-
+        Log.v("ListenerDataSource", "onProductDataResponse")
         when (response.requestStatus) {
             ProductDataResponse.RequestStatus.SUCCESSFUL -> {
                 val productsMap = hashMapOf<String, NowProduct>()
@@ -72,6 +81,12 @@ class AmazonPurchasingListenerDataSource: BillingListenerDataSource {
      * to sell from your app. Use the valid SKUs in onPurchaseResponse.
      */
     override fun onPurchaseResponse(response: PurchaseResponse) {
+
+
+
+
+
+        Log.v("BillingViewModel", "onPurchaseResponse " + Thread.currentThread().name)
         when (response.requestStatus) {
             PurchaseResponse.RequestStatus.SUCCESSFUL -> {
                 val receipt  = response.receipt // do some stuff with receipt
@@ -79,6 +94,7 @@ class AmazonPurchasingListenerDataSource: BillingListenerDataSource {
             }
             PurchaseResponse.RequestStatus.ALREADY_PURCHASED -> {
                 _billingEventSubject.value = BillingListenerEvent.AlreadyPurchasedEvent
+
             }
             PurchaseResponse.RequestStatus.FAILED -> {
                 _billingEventSubject.value = BillingListenerEvent.FailedToPurchaseEvent
@@ -92,6 +108,6 @@ class AmazonPurchasingListenerDataSource: BillingListenerDataSource {
 
      */
     override fun onPurchaseUpdatesResponse(p0: PurchaseUpdatesResponse?) {
-
+        Log.v("ListenerDataSource", "onPurchaseUpdatesResponse")
     }
 }

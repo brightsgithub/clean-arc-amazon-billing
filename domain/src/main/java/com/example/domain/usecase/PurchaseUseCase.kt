@@ -1,8 +1,11 @@
 package com.example.domain.usecase
 
 import com.example.domain.models.BillingListenerEvent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
-interface PurchaseUseCase: UseCase<PurchaseUseCase.Params, Flow<BillingListenerEvent>> {
+interface PurchaseUseCase {
     data class Params(var sku: String)
+
+    fun invoke(params: Params)
 }

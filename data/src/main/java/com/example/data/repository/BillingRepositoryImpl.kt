@@ -5,7 +5,13 @@ import com.example.data.datasource.InitBillingDataSource
 import com.example.data.datasource.ProcessBillingRequestsDataSource
 import com.example.domain.models.BillingListenerEvent
 import com.example.domain.repository.BillingRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 class BillingRepositoryImpl(
     private val billingListenerDataSource: BillingListenerDataSource,
@@ -13,8 +19,8 @@ class BillingRepositoryImpl(
     private val processBillingRequest: ProcessBillingRequestsDataSource
     ): BillingRepository {
 
-    init {
-        initBillingDataSource.initBilling()
+    override fun initBilling(): Boolean {
+        return initBillingDataSource.initBilling()
     }
 
     override fun listenForBillingEvents(): Flow<BillingListenerEvent> {

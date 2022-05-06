@@ -13,10 +13,10 @@ class InitAmazonBillingDataSource(
     private val applicationContext: Context
     ): InitBillingDataSource {
 
-    override fun initBilling() {
+    override fun initBilling() : Boolean {
         Log.d("InitBilling", "onCreate: registering PurchasingListener")
         PurchasingService.registerListener(applicationContext, billingListenerDataSource)
-        Log.d("InitBilling","Appstore SDK Mode: " + LicensingService.getAppstoreSDKMode()
-        ) // Checks if app is in test mode
+        Log.d("InitBilling","Appstore SDK Mode: " + LicensingService.getAppstoreSDKMode()) // Checks if app is in test mode
+        return true
     }
 }
