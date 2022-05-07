@@ -59,9 +59,9 @@ open class AmazonBillingApp: Application() {
             Dispatchers.Main
         }
 
-        factory<BillingListenerDataSource> { AmazonPurchasingListenerDataSource() }
-        factory<ProcessBillingRequestsDataSource> { AmazonProcessBillingRequestsDataSource() }
-        factory<InitBillingDataSource> { InitAmazonBillingDataSource(get(), instance) }
+        single<BillingListenerDataSource> { AmazonPurchasingListenerDataSource() }
+        single<ProcessBillingRequestsDataSource> { AmazonProcessBillingRequestsDataSource() }
+        single<InitBillingDataSource> { InitAmazonBillingDataSource(get(), instance) }
 
 
         single<BillingRepository> {

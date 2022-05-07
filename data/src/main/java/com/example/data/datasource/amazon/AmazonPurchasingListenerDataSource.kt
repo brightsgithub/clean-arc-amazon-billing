@@ -81,11 +81,6 @@ class AmazonPurchasingListenerDataSource(): BillingListenerDataSource {
      * to sell from your app. Use the valid SKUs in onPurchaseResponse.
      */
     override fun onPurchaseResponse(response: PurchaseResponse) {
-
-
-
-
-
         Log.v("BillingViewModel", "onPurchaseResponse " + Thread.currentThread().name)
         when (response.requestStatus) {
             PurchaseResponse.RequestStatus.SUCCESSFUL -> {
@@ -97,7 +92,14 @@ class AmazonPurchasingListenerDataSource(): BillingListenerDataSource {
 
             }
             PurchaseResponse.RequestStatus.FAILED -> {
-                _billingEventSubject.value = BillingListenerEvent.FailedToPurchaseEvent
+
+
+                Thread(Runnable {
+                    _billingEventSubject.value = BillingListenerEvent.FailedToPurchaseEvent
+                }).start()
+
+                _billingEventSubject.value = BillingListenerEvent.AlreadyPurchasedEvent
+                Thread.sleep(5000)
             }
         }
     }
