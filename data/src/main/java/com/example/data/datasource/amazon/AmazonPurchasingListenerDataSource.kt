@@ -23,21 +23,12 @@ import kotlinx.coroutines.launch
  */
 class AmazonPurchasingListenerDataSource(): BillingListenerDataSource {
 
-    init {
-        Log.v("BillingViewModel", "AmazonPurchasingListenerDataSource Created!!!!!!!!! " + Thread.currentThread().name)
-    }
-
     private val _billingEventSubject = MutableStateFlow<BillingListenerEvent?>(null)
     private val billingEventSubject: Flow<BillingListenerEvent?> = _billingEventSubject
 
     override fun listenForBillingEvents(): Flow<BillingListenerEvent> {
         return billingEventSubject.filterNotNull()
     }
-
-    override fun forceResponse() {
-        _billingEventSubject.value = BillingListenerEvent.AlreadyPurchasedEvent
-    }
-
 
     /**
      * onUserDataResponse(UserDataResponse userDataResponse): Invoked after a call to getUserData.
@@ -78,7 +69,6 @@ class AmazonPurchasingListenerDataSource(): BillingListenerDataSource {
         }
     }
 
-
     /**
      * onProductDataResponse(ProductDataResponse productDataResponse): Invoked after a call to
      * getProductDataRequest(java.util.Set skus). Retrieves information about SKUs you would like
@@ -96,14 +86,7 @@ class AmazonPurchasingListenerDataSource(): BillingListenerDataSource {
 
             }
             PurchaseResponse.RequestStatus.FAILED -> {
-
-
-                Thread(Runnable {
-                    _billingEventSubject.value = BillingListenerEvent.FailedToPurchaseEvent
-                }).start()
-
-                _billingEventSubject.value = BillingListenerEvent.AlreadyPurchasedEvent
-                Thread.sleep(5000)
+                _billingEventSubject.value = BillingListenerEvent.FailedToPurchaseEvent
             }
         }
     }

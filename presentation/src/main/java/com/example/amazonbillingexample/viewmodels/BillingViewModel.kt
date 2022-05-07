@@ -40,7 +40,7 @@ class BillingViewModel (
 
 
         Log.v("BillingViewModel", "1 " + Thread.currentThread().name)
-        scope.launch {
+        scope.launch(dispatcherBackground) {
             Log.v("BillingViewModel", "2 " + Thread.currentThread().name)
             launch  {
                 Log.v("BillingViewModel", "billingListenerUseCaseImpl START!!!!" + Thread.currentThread().name)
@@ -69,23 +69,13 @@ class BillingViewModel (
 
             launch {
                 Log.v("BillingViewModel", "purchaseUseCase START!!!!" + Thread.currentThread().name)
-                delay(2000)
                 purchaseUseCase.invoke(PurchaseUseCase.Params(sku))
                 Log.v("BillingViewModel", "purchaseUseCase FINISHED!!!!" + Thread.currentThread().name)
             }
-
-            Thread(Runnable {
-                Thread.sleep(5000)
-                GlobalScope.launch(dispatcherBackground) {
-
-                    Log.v("BillingViewModel", "inside the new thread? "+ Thread.currentThread().name)
-                    _state.value = PurchaseViewState.Success
-                }
-            }).start()
-
         }
+    }
 
-        Log.v("BillingViewModel", "METHOD FINISHED!!!!")
+    fun displayDataOnView() {
 
     }
 }

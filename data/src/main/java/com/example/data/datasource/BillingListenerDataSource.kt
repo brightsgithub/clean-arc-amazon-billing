@@ -8,5 +8,4 @@ interface BillingListenerDataSource: PurchasingListener {
 
     // here we can decorate with extra interface methods we might need
     fun listenForBillingEvents(): Flow<BillingListenerEvent>
-    fun forceResponse()
 }
