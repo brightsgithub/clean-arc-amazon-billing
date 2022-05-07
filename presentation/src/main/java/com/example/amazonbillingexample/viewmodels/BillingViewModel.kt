@@ -45,18 +45,6 @@ class BillingViewModel (
             launch  {
                 Log.v("BillingViewModel", "billingListenerUseCaseImpl START!!!!" + Thread.currentThread().name)
                 billingListenerUseCaseImpl.invoke()
-                    .catch {
-                        Log.v("BillingViewModel", "catch")
-                    }
-                    .onCompletion {
-                        Log.v("BillingViewModel", "onCompletion")
-                    }
-                    .onEmpty {
-                        Log.v("BillingViewModel", "onEach")
-                    }
-                    .onEach {
-                        Log.v("BillingViewModel", "onEach")
-                    }
                     .collect {
                         when(it) {
                             is BillingListenerEvent.PurchaseSuccessEvent -> {

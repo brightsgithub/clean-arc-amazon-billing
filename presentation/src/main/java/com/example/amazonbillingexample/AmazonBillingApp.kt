@@ -27,7 +27,7 @@ import org.koin.dsl.module
 const val IO = "IO"
 const val MAIN = "MAIN"
 
-open class AmazonBillingApp: Application() {
+class AmazonBillingApp: Application() {
 
 
     private val _state = MutableStateFlow<PurchaseViewState?>(null)
@@ -59,10 +59,10 @@ open class AmazonBillingApp: Application() {
             Dispatchers.Main
         }
 
-        single<BillingListenerDataSource> { AmazonPurchasingListenerDataSource() }
-        single<ProcessBillingRequestsDataSource> { AmazonProcessBillingRequestsDataSource() }
-        single<InitBillingDataSource> { InitAmazonBillingDataSource(get(), instance) }
 
+        factory<ProcessBillingRequestsDataSource> { AmazonProcessBillingRequestsDataSource() }
+        factory<InitBillingDataSource> { InitAmazonBillingDataSource(get(), instance) }
+        single<BillingListenerDataSource> { AmazonPurchasingListenerDataSource() } // Must use the same instance!
 
         single<BillingRepository> {
             BillingRepositoryImpl(get(), get(), get())

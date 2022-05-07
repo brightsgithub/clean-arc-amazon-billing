@@ -23,6 +23,10 @@ import kotlinx.coroutines.launch
  */
 class AmazonPurchasingListenerDataSource(): BillingListenerDataSource {
 
+    init {
+        Log.v("BillingViewModel", "AmazonPurchasingListenerDataSource Created!!!!!!!!! " + Thread.currentThread().name)
+    }
+
     private val _billingEventSubject = MutableStateFlow<BillingListenerEvent?>(null)
     private val billingEventSubject: Flow<BillingListenerEvent?> = _billingEventSubject
 
