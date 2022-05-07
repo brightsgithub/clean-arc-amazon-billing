@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.interfaces
 
 interface UseCase<in Params, out ReturnType> {
     operator fun invoke(params: Params): ReturnType

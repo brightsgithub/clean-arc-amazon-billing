@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.interfaces
 
 import com.example.domain.models.BillingListenerEvent
 import kotlinx.coroutines.flow.Flow

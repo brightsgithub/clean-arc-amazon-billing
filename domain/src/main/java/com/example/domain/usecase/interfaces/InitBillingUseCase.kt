@@ -1,4 +1,4 @@
-package com.example.domain.usecase
+package com.example.domain.usecase.interfaces
 
 interface InitBillingUseCase : UseCaseUnit<Boolean> {
 }

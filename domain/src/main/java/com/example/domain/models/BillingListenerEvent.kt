@@ -1,8 +1,13 @@
 package com.example.domain.models
 
 sealed class BillingListenerEvent {
-    data class UserDataEvent(val data: NowUserData) : BillingListenerEvent()
-    data class ProductDataEvent(val data: NowProductWrapper) : BillingListenerEvent()
+
+    data class GetUserDataEventSuccess(val data: NowUserData) : BillingListenerEvent()
+    object GetUserDataEventFailure : BillingListenerEvent()
+
+    data class GetProductDataEventSuccess(val data: NowProductWrapper) : BillingListenerEvent()
+    object GetProductDataEventFailure : BillingListenerEvent()
+
     object PurchaseSuccessEvent : BillingListenerEvent()
     object AlreadyPurchasedEvent : BillingListenerEvent()
     object FailedToPurchaseEvent : BillingListenerEvent()
