@@ -6,6 +6,6 @@ interface ProcessBillingRequestsDataSource {
 
     fun getUserData()
     fun getPurchaseInfo()
-    fun getProductData(skus: List<NowSku>)
+    fun getProductData()
     fun purchaseItem(sku:String)
 }

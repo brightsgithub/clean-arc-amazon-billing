@@ -8,6 +8,6 @@ interface BillingRepository {
     fun listenForBillingEvents(): Flow<BillingListenerEvent>
     fun purchaseItem(sku: String)
     fun initBilling(): Boolean
-    suspend fun getSavedSkus(): List<NowSku>
-    suspend fun loadProductData()
+    fun getSavedSkus(): List<NowSku>
+    fun loadProductData()
 }

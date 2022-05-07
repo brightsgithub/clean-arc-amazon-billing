@@ -13,7 +13,7 @@ interface BillingStorage {
     suspend fun saveUserData(nowUserData: NowUserData)
 
     // Sku related info
-    suspend fun getSavedProductSkus() : List<NowSku>
+    fun getSavedProductSkus() : List<NowSku>
     suspend fun saveProductSku(sku: NowSku)
     suspend fun deleteSavedProductSku(sku: NowSku)
 }

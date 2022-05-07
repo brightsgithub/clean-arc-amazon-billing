@@ -9,7 +9,7 @@ class BillingStorageImpl(private val appPreferences: AppPreferences) : BillingSt
         TODO("Not yet implemented")
     }
 
-    override suspend fun getSavedProductSkus(): List<NowSku> {
+    override fun getSavedProductSkus(): List<NowSku> {
         // We should be getting this from our backend systems
         val CONSUMEABLE_APPLE_SKU = "com.example.amazonbillingexampl.apple"
         val CONSUMEABLE_MANGO_SKU = "com.example.amazonbillingexampl.mango"

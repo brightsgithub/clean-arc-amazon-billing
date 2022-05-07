@@ -7,13 +7,7 @@ import com.example.data.storage.BillingStorage
 import com.example.domain.models.BillingListenerEvent
 import com.example.domain.models.NowSku
 import com.example.domain.repository.BillingRepository
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 
 /**
  * This class should remain generic & apply to ALL types of Billing implementations.
@@ -30,13 +24,12 @@ class BillingRepositoryImpl(
         return initBillingDataSource.initBilling()
     }
 
-    override suspend fun getSavedSkus(): List<NowSku> {
+    override fun getSavedSkus(): List<NowSku> {
         return billingStorage.getSavedProductSkus()
     }
 
-    override suspend fun loadProductData() {
-        val savedSkus = getSavedSkus()
-        processBillingRequest.getProductData(savedSkus)
+    override fun loadProductData() {
+        processBillingRequest.getProductData()
     }
 
     override fun listenForBillingEvents(): Flow<BillingListenerEvent> {

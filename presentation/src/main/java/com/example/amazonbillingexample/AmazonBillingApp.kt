@@ -61,7 +61,7 @@ class AmazonBillingApp: Application() {
             Dispatchers.Main
         }
 
-        factory<ProcessBillingRequestsDataSource> { AmazonProcessBillingRequestsDataSource() }
+        factory<ProcessBillingRequestsDataSource> { AmazonProcessBillingRequestsDataSource(get())}
         factory<InitBillingDataSource> { InitAmazonBillingDataSource(get(), instance) }
         single<BillingListenerDataSource> { AmazonPurchasingListenerDataSource() } // Must use the same instance!
         single<AppPreferences> { AppPreferencesImpl(instance) }
