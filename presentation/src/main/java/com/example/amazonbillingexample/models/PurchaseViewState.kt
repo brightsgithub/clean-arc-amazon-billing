@@ -5,6 +5,9 @@ import com.example.domain.models.NowSku
 
 sealed class PurchaseViewState {
 
+    object ProductPurchasedSuccess : PurchaseViewState()
+    object ProductPurchasedFailure : PurchaseViewState()
+
     data class GetProductSkusSuccess(val skus: List<NowSku>) : PurchaseViewState()
     object GetProductSkusFailure : PurchaseViewState()
 

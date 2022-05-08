@@ -38,22 +38,23 @@ class BillingViewModel (
         scope.launch  {
             billingListenerUseCaseImpl.invoke()
                 .collect {
+                    hideLoadingState()
                     when(it) {
-                        is BillingListenerEvent.PurchaseSuccessEvent -> { log("PurchaseSuccessEvent") }
-                        is BillingListenerEvent.AlreadyPurchasedEvent -> { log("AlreadyPurchasedEvent") }
-                        is BillingListenerEvent.FailedToPurchaseEvent -> { log("FailedToPurchaseEvent") }
+                        is BillingListenerEvent.PurchaseSuccessEvent -> {
+                            _state.emit(PurchaseViewState.ProductPurchasedSuccess)
+                        }
+                        is BillingListenerEvent.FailedToPurchaseEvent -> {
+                            _state.emit(PurchaseViewState.ProductPurchasedFailure)
+                        }
                         is BillingListenerEvent.GetProductDataEventSuccess -> {
-                            log("GetProductDataEventSuccess")
-                            hideLoadingState()
                             _state.emit(PurchaseViewState.ProductsLoadedSuccess(it.data))
                         }
                         is BillingListenerEvent.GetProductDataEventFailure -> {
-                            log("GetProductDataEventFailure")
-                            hideLoadingState()
                             _state.emit(PurchaseViewState.ProductsLoadedFailure)
                         }
-                        is BillingListenerEvent.GetUserDataEventSuccess -> { log("GetUserDataEventSuccess") }
-                        is BillingListenerEvent.GetUserDataEventFailure -> { log("GetUserDataEventFailure") }
+                        is BillingListenerEvent.AlreadyPurchasedEvent -> { }
+                        is BillingListenerEvent.GetUserDataEventSuccess -> { }
+                        is BillingListenerEvent.GetUserDataEventFailure -> { }
                     }
                 }
         }
