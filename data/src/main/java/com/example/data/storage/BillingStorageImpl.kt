@@ -15,8 +15,8 @@ class BillingStorageImpl(private val appPreferences: AppPreferences) : BillingSt
         val CONSUMEABLE_MANGO_SKU = "com.example.amazonbillingexampl.mango"
 
         val skus = arrayListOf<NowSku>()
-        skus.add(NowSku(CONSUMEABLE_APPLE_SKU))
-        skus.add(NowSku(CONSUMEABLE_MANGO_SKU))
+        skus.add(NowSku(CONSUMEABLE_APPLE_SKU, "apple"))
+        skus.add(NowSku(CONSUMEABLE_MANGO_SKU, "mango"))
         return skus
     }
 

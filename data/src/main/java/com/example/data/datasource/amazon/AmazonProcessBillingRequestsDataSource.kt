@@ -6,8 +6,7 @@ import com.example.data.datasource.ProcessBillingRequestsDataSource
 import com.example.data.storage.BillingStorage
 import com.example.domain.models.NowSku
 
-class AmazonProcessBillingRequestsDataSource(private val billingStorage: BillingStorage):
-    ProcessBillingRequestsDataSource {
+class AmazonProcessBillingRequestsDataSource(private val billingStorage: BillingStorage): ProcessBillingRequestsDataSource {
 
     private val TAG = "BillingRequest"
     override fun getUserData() {

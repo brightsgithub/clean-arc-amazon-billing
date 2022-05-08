@@ -4,15 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.MainActivity">
+    tools:context=".views.MainActivity"
 
-    <TextView
+    >
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/Theme.AmazonBillingExample.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.AmazonBillingExample.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <Button
+        android:id="@+id/buy_apple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Eat an Apple"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintRight_toLeftOf="@+id/buy_mango"
+        />
+
+
+    <Button
+        android:id="@+id/buy_mango"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eat a Mango"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/buy_apple"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+    <Button
+        android:id="@+id/get_iap_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get All IAP Items"
+        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/buy_apple" />
+
+    <TextView
+        android:id="@+id/iap_items_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apple\nOrange"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/get_iap_button" />
+
+    <ProgressBar
+        android:id="@+id/loading_spinner"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
