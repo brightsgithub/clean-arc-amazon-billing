@@ -54,7 +54,7 @@ The **BillingRepository** is kept s generic as possible, where its rules should 
 ------------------
 
 
-(to test in Android studio, be sure to select the **mockServerDebug** variant for all modules)
+
 
 
 
