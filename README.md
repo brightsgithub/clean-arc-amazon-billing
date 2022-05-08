@@ -10,12 +10,11 @@ Libraries used
 Ability to Consume In App Products as Consumables
 -------------------------------------------------
 
-This is a simple application that accesses an API to display:
+This is a simple application that uses Amazon IAB API to:
 
-1) A User's CV with summary information.
-2) A list of previous work experiences.
-3) When a previous experience has been clicked on, the detail view is shown.
-4) **Offline mode supported**
+1) Purchase an Apple Consumable
+2) Purchase a Mango Consumable
+3) Display all IAP
 
 Architecture
 ------------------
