@@ -5,7 +5,7 @@ import com.example.domain.usecase.interfaces.PurchaseUseCase
 
 class PurchaseUseCaseImpl(private val billingRepository: BillingRepository): PurchaseUseCase {
 
-    override fun invoke(params: PurchaseUseCase.Params) {
+    override suspend fun invoke(params: PurchaseUseCase.Params) {
         return billingRepository.purchaseItem(params.sku)
     }
 }

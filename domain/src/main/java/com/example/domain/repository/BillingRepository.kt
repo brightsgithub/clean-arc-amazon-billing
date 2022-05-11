@@ -6,8 +6,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface BillingRepository {
     fun listenForBillingEvents(): Flow<BillingListenerEvent>
-    fun purchaseItem(sku: String)
+    suspend fun purchaseItem(sku: String)
     fun initBilling(): Boolean
     fun getSavedSkus(): List<NowSku>
     fun loadProductData()
+
+    sealed class BillingError: Exception() {
+        object PurchaseFailedException : BillingError()
+        object InvalidSkuException: BillingError()
+    }
 }

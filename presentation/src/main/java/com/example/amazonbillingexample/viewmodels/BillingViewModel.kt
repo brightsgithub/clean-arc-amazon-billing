@@ -7,10 +7,10 @@ import com.example.amazonbillingexample.models.PurchaseViewState
 import com.example.domain.exceptions.NoSavedSkusFoundException
 import com.example.domain.models.BillingListenerEvent
 import com.example.domain.models.NowSku
+import com.example.domain.repository.BillingRepository
 import com.example.domain.usecase.interfaces.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import java.lang.RuntimeException
 
 class BillingViewModel (
     private val purchaseUseCase: PurchaseUseCase,
@@ -84,8 +84,15 @@ class BillingViewModel (
 
     fun purchase(sku: String, scope: CoroutineScope = viewModelScope) {
         scope.launch {
-        showLoadingState()
-            purchaseUseCase.invoke(PurchaseUseCase.Params(sku))
+            showLoadingState()
+            try {
+                purchaseUseCase.invoke(PurchaseUseCase.Params(sku))
+            } catch (error: BillingRepository.BillingError) {
+                when (error) {
+                    BillingRepository.BillingError.InvalidSkuException -> TODO()
+                    BillingRepository.BillingError.PurchaseFailedException -> TODO()
+                }
+            }
         }
     }
 
