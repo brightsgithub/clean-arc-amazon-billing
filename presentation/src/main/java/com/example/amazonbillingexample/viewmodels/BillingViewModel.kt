@@ -10,11 +10,11 @@ import com.example.domain.models.NowSku
 import com.example.domain.usecase.interfaces.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import java.lang.RuntimeException
 
 class BillingViewModel (
     private val purchaseUseCase: PurchaseUseCase,
     private val initBillingUseCase: InitBillingUseCase,
+    private val unRegisterBillingUseCase: UnRegisterBillingUseCase,
     private val billingListenerUseCaseImpl: BillingListenerUseCase,
     private val getSavedSkusUseCase: GetSavedSkusUseCase,
     private val loadProductDataUseCase: LoadProductDataUseCase,
@@ -30,7 +30,7 @@ class BillingViewModel (
     }
 
     fun initBilling(scope: CoroutineScope = viewModelScope) {
-        initBillingUseCase.invoke()
+        initBillingUseCase.invoke(scope)
         startListeningForBillingEvents()
     }
 
@@ -108,5 +108,10 @@ class BillingViewModel (
     // Terrible method, but excused as this is for demo purposes
     fun searchForSKU(skus: List<NowSku>, skuToFind: String): String {
         return skus.find { sku -> skuToFind.equals(sku.simpleName) }!!.skuId
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        unRegisterBillingUseCase.invoke()
     }
 }

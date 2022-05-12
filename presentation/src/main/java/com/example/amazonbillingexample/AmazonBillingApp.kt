@@ -7,6 +7,7 @@ import com.example.data.datasource.amazon.AmazonPurchasingListenerDataSource
 import com.example.data.datasource.BillingListenerDataSource
 import com.example.data.datasource.InitBillingDataSource
 import com.example.data.datasource.ProcessBillingRequestsDataSource
+import com.example.data.datasource.amazon.AmazonIapManager
 import com.example.data.datasource.amazon.AmazonProcessBillingRequestsDataSource
 import com.example.data.datasource.amazon.InitAmazonBillingDataSource
 import com.example.data.repository.BillingRepositoryImpl
@@ -61,23 +62,27 @@ class AmazonBillingApp: Application() {
             Dispatchers.Main
         }
 
+
         factory<ProcessBillingRequestsDataSource> { AmazonProcessBillingRequestsDataSource(get())}
         factory<InitBillingDataSource> { InitAmazonBillingDataSource(get(), instance) }
-        single<BillingListenerDataSource> { AmazonPurchasingListenerDataSource() } // Must use the same instance!
+        factory { AmazonIapManager(get()) }
+        single<BillingListenerDataSource> { AmazonPurchasingListenerDataSource(get()) } // Must use the same instance!
         single<AppPreferences> { AppPreferencesImpl(instance) }
         single<BillingStorage> { BillingStorageImpl(get()) }
 
         single<BillingRepository> {
             BillingRepositoryImpl(get(), get(), get(), get())
         }
+
         factory<PurchaseUseCase> { PurchaseUseCaseImpl(get()) }
+        factory<UnRegisterBillingUseCase> { UnRegisterBillingUseCaseImpl(get()) }
         factory<InitBillingUseCase> { InitBillingUseCaseImpl(get()) }
         factory <BillingListenerUseCase> { BillingListenerUseCaseImpl(get()) }
         factory <GetSavedSkusUseCase> { GetSavedSkusUseCaseImpl(get()) }
         factory <LoadProductDataUseCase> { LoadProductDataUseCaseImpl(get()) }
 
         viewModel {
-            BillingViewModel(get(), get(), get(), get(), get(), get(named(IO)), get(named(MAIN)))
+            BillingViewModel(get(), get(), get(), get(), get(), get(), get(named(IO)), get(named(MAIN)))
         }
     }
 }

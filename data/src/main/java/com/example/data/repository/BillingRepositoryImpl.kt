@@ -7,6 +7,7 @@ import com.example.data.storage.BillingStorage
 import com.example.domain.models.BillingListenerEvent
 import com.example.domain.models.NowSku
 import com.example.domain.repository.BillingRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,8 +21,12 @@ class BillingRepositoryImpl(
     private val billingStorage: BillingStorage
     ): BillingRepository {
 
-    override fun initBilling(): Boolean {
-        return initBillingDataSource.initBilling()
+    override fun initBilling(coroutineScope: CoroutineScope): Boolean {
+        return initBillingDataSource.initBilling(coroutineScope)
+    }
+
+    override fun unRegisterBilling() {
+        billingListenerDataSource.unRegisterBilling()
     }
 
     override fun getSavedSkus(): List<NowSku> {

@@ -1,4 +1,7 @@
 package com.example.domain.usecase.interfaces
 
-interface InitBillingUseCase : UseCaseUnit<Boolean> {
+import kotlinx.coroutines.CoroutineScope
+
+interface InitBillingUseCase {
+    fun invoke(coroutineScope: CoroutineScope): Boolean
 }
