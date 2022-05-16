@@ -1,12 +1,5 @@
 package com.example.data.repository
 
-import com.amazon.device.iap.PurchasingListener
-import com.amazon.device.iap.PurchasingService
-import com.amazon.device.iap.model.ProductDataResponse
-import com.amazon.device.iap.model.PurchaseResponse
-import com.amazon.device.iap.model.PurchaseUpdatesResponse
-import com.amazon.device.iap.model.RequestId
-import com.amazon.device.iap.model.UserDataResponse
 import com.example.data.datasource.BillingListenerDataSource
 import com.example.data.datasource.InitBillingDataSource
 import com.example.data.datasource.ProcessBillingRequestsDataSource
@@ -29,10 +22,29 @@ class BillingRepositoryImpl(
     private val billingListenerDataSource: BillingListenerDataSource,
     private val initBillingDataSource: InitBillingDataSource,
     private val processBillingRequest: ProcessBillingRequestsDataSource,
-    private val billingStorage: BillingStorage
-    ): BillingRepository, PurchasingListener {
+    private val billingStorage: BillingStorage,
+    private val billingService: BillingServiceAmazon
+    ): BillingRepository {
 
-    private val continuationsMap = mutableMapOf<RequestId, Continuation<Unit>>()
+    init {
+        billingService.setListener(listener = object : BillingService.Listener {
+            override fun onBillingPurchaseResponse(billingPurchaseResponse: BillingService.BillingPurchaseResponse) {
+                continuationsMap[billingPurchaseResponse.id]?.let { cont ->
+                    when (billingPurchaseResponse.status) {
+                        BillingService.Status.SUCCESSFUL -> cont.resume(Unit)
+                        BillingService.Status.FAILED ->
+                            cont.resumeWithException(BillingRepository.BillingError.PurchaseFailedException)
+                        BillingService.Status.INVALID_SKU ->
+                            cont.resumeWithException(BillingRepository.BillingError.InvalidSkuException)
+                        BillingService.Status.ALREADY_PURCHASED -> TODO()
+                        BillingService.Status.NOT_SUPPORTED -> TODO()
+                    }
+                }
+            }
+        })
+    }
+
+    private val continuationsMap = mutableMapOf<String, Continuation<Unit>>() // key is request id
 
     override fun initBilling(): Boolean {
         return initBillingDataSource.initBilling()
@@ -53,37 +65,10 @@ class BillingRepositoryImpl(
     override suspend fun purchaseItem(sku: String) {
         withTimeout(5000) {
             suspendCoroutine<Unit> { cont ->
-                PurchasingService.purchase(sku).let { requestId ->
-                    continuationsMap[requestId] = cont
+                billingService.purchaseItem(sku).let {
+                    continuationsMap[it] = cont
                 }
             }
         }
-    }
-
-    override fun onUserDataResponse(p0: UserDataResponse?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onProductDataResponse(p0: ProductDataResponse?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onPurchaseResponse(purchaseResponse: PurchaseResponse) {
-        // if the request id exist in the map we resume the continuation
-        continuationsMap[purchaseResponse.requestId]?.let { cont ->
-            when (purchaseResponse.requestStatus) {
-                PurchaseResponse.RequestStatus.SUCCESSFUL -> cont.resume(Unit)
-                PurchaseResponse.RequestStatus.FAILED ->
-                    cont.resumeWithException(BillingRepository.BillingError.PurchaseFailedException)
-                PurchaseResponse.RequestStatus.INVALID_SKU ->
-                    cont.resumeWithException(BillingRepository.BillingError.InvalidSkuException)
-                PurchaseResponse.RequestStatus.ALREADY_PURCHASED -> TODO()
-                PurchaseResponse.RequestStatus.NOT_SUPPORTED -> TODO()
-            }
-        }
-    }
-
-    override fun onPurchaseUpdatesResponse(p0: PurchaseUpdatesResponse?) {
-        TODO("Not yet implemented")
     }
 }
